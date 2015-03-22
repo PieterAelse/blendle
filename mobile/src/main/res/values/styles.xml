@@ -1,0 +1,9 @@
+<resources>
+
+    <style name="BlendleTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/blende_red</item>
+        <item name="colorPrimaryDark">@color/blende_red_dark</item>
+        <item name="colorAccent">@color/blende_accent</item>
+    </style>
+
+</resources>
