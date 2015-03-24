@@ -6,15 +6,34 @@ import com.piotapps.blendle.api.APIConstants;
 public class Links {
 
     @SerializedName(APIConstants.KEY_SELF)
-    public Stringie self;
+    private Href self;
 
     @SerializedName(APIConstants.KEY_PREVIOUS)
-    public Stringie previous;
+    private Href previous;
 
     @SerializedName(APIConstants.KEY_NEXT)
-    public Stringie next;
+    private Href next;
 
-    private class Stringie {
+    @SerializedName(APIConstants.KEY_ITEM_CONTENT)
+    private Href itemContent;
+
+    public String getSelf() {
+        return self.value;
+    }
+
+    public String getPrevious() {
+        return previous.value;
+    }
+
+    public String getNext() {
+        return next.value;
+    }
+
+    public String getItemContent() {
+        return itemContent.value;
+    }
+
+    private class Href {
         @SerializedName(APIConstants.KEY_HREF)
         String value;
     }

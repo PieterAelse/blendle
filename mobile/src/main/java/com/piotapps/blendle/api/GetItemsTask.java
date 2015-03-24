@@ -30,8 +30,7 @@ public class GetItemsTask extends AsyncTask<String, Integer, PopularItems> {
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
-                PopularItems pi = gson.fromJson(response.body().charStream(), PopularItems.class);
-                return pi;
+                return gson.fromJson(response.body().charStream(), PopularItems.class);
             } else {
                 return null;
             }

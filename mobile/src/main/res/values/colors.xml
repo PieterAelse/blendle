@@ -2,5 +2,5 @@
 
     <color name="blende_red">#f1563c</color>
     <color name="blende_red_dark">#d24932</color>
-    <color name="blende_accent">#0000ff</color> <!--TODO -->
+    <color name="blende_accent">#f1563c</color> <!--TODO -->
 </resources>
