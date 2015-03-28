@@ -3,12 +3,15 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 22
     buildToolsVersion "22.0.0"
+
     defaultConfig {
         applicationId "com.piotapps.blendle"
-        minSdkVersion 15
+        minSdkVersion 9
         targetSdkVersion 22
         versionCode 1
         versionName "0.1"
+
+        buildConfigField("String", "TAG", "\"Blendle_PiOt\"")
     }
 
     buildTypes {

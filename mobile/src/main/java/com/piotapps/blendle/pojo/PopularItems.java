@@ -4,8 +4,7 @@ package com.piotapps.blendle.pojo;
 import com.google.gson.annotations.SerializedName;
 import com.piotapps.blendle.api.APIConstants;
 
-import java.util.ArrayList;
-import java.util.jar.Manifest;
+import java.io.Serializable;
 
 public class PopularItems {
 
@@ -28,7 +27,7 @@ public class PopularItems {
         @SerializedName(APIConstants.KEY_ITEMS)
         private PopularItem[] items;
 
-        public class PopularItem {
+        public class PopularItem implements Serializable {
             @SerializedName(APIConstants.KEY_ID)
             private String id;
 
@@ -93,7 +92,7 @@ public class PopularItems {
                 return price;
             }
 
-            public class Embedded {
+            public class Embedded implements Serializable {
 
                 @SerializedName(APIConstants.KEY_MANIFEST)
                 public ItemManifest manifest;

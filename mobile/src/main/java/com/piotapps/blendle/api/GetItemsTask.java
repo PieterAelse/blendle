@@ -1,6 +1,7 @@
 package com.piotapps.blendle.api;
 
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.piotapps.blendle.interfaces.AsynCallback;
@@ -15,7 +16,7 @@ public class GetItemsTask extends AsyncTask<String, Integer, PopularItems> {
 
     private AsynCallback callback;
 
-    public GetItemsTask(AsynCallback callback) {
+    public GetItemsTask(@NonNull AsynCallback callback) {
         this.callback = callback;
     }
 
@@ -25,6 +26,13 @@ public class GetItemsTask extends AsyncTask<String, Integer, PopularItems> {
 
         OkHttpClient client = new OkHttpClient();
         Gson gson = new Gson();
+
+        // Used for debugging loading state
+//        try {
+//            Thread.sleep(3000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         Request request = new Request.Builder().url(url).build();
         try {

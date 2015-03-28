@@ -1,68 +1,29 @@
 package com.piotapps.blendle;
 
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.view.WindowCompat;
+import android.support.v7.app.ActionBar;
 import android.view.View;
+import android.view.Window;
 import android.widget.ProgressBar;
 
-import com.piotapps.blendle.adapters.PopularItemAdapter;
-import com.piotapps.blendle.api.APIConstants;
-import com.piotapps.blendle.api.GetItemsTask;
-import com.piotapps.blendle.interfaces.AsynCallback;
-import com.piotapps.blendle.pojo.PopularItems;
+import com.piotapps.blendle.fragments.PopularTodayFragment;
+import com.squareup.picasso.Picasso;
 
-import java.util.Arrays;
-
-import butterknife.ButterKnife;
-import butterknife.InjectView;
-
-public class MainActivity extends BaseActivity implements AsynCallback {
-
-    @InjectView(R.id.main_progess)
-    ProgressBar progress;
-    @InjectView(R.id.main_recyclerview)
-    RecyclerView recyclerView;
-
-    private PopularItems popularItems;
-    private PopularItemAdapter adapter;
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-        setContentView(R.layout.activity_list);
-
-        ButterKnife.inject(this);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        recyclerView.setLayoutManager(layoutManager);
+        setContentView(R.layout.activity_main);
 
         showMessage("Welcome! This is Blendle by Pieter Otten"); // TODO extract
 
-        new GetItemsTask(this).execute(APIConstants.URL_POPULAR_ITEMS);
-    }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_fragmentHolder, PopularTodayFragment.newInstance())
+                .commit();
 
-    @Override
-    public void started() {
-        progress.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void progress() {
-        // TODO?
-    }
-
-    @Override
-    public void ended(final PopularItems pi) {
-        progress.setVisibility(View.GONE);
-
-        if (pi != null) {
-            popularItems = pi;
-
-            adapter = new PopularItemAdapter(Arrays.asList(popularItems.getPopularItems()));
-            recyclerView.setAdapter(adapter);
-        }
+        // TODO: add check if daydream is enabled
     }
 }

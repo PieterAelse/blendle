@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Blendle by PieterOtten</string>
+    <string name="app_name">Blendle by Pieter Otten</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_madeby">Made by Pieter Otten</string>
 </resources>

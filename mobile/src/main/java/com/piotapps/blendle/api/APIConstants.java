@@ -38,4 +38,14 @@ public class APIConstants {
     public static final String KEY_IMAGE_HEIGHT = "height";
     public static final String KEY_ITEM_INDEX = "item_index";
 
+    // Body types
+    public static final String KEY_BODY_KICKER = "kicker";
+    public static final String KEY_BODY_HEADLINE_1 = "hl1";
+    public static final String KEY_BODY_HEADLINE_2 = "hl2";
+    public static final String KEY_BODY_INTRO = "intro";
+    public static final String KEY_BODY_BYLINE = "kicker";
+    public static final String KEY_BODY_PARAGRAPH = "p";
+    public static final String KEY_BODY_PARAGRAPH_HEADER = "ph";
+    public static final String KEY_BODY_LEAD = "lead";
+
 }

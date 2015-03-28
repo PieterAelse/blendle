@@ -3,7 +3,9 @@ package com.piotapps.blendle.pojo;
 import com.google.gson.annotations.SerializedName;
 import com.piotapps.blendle.api.APIConstants;
 
-public class Links {
+import java.io.Serializable;
+
+public class Links implements Serializable {
 
     @SerializedName(APIConstants.KEY_SELF)
     private Href self;
@@ -33,7 +35,7 @@ public class Links {
         return itemContent.value;
     }
 
-    private class Href {
+    private class Href implements Serializable {
         @SerializedName(APIConstants.KEY_HREF)
         String value;
     }

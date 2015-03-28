@@ -3,7 +3,9 @@ package com.piotapps.blendle.pojo;
 import com.google.gson.annotations.SerializedName;
 import com.piotapps.blendle.api.APIConstants;
 
-public class ItemManifest {
+import java.io.Serializable;
+
+public class ItemManifest implements Serializable {
 
     @SerializedName(APIConstants.KEY_ITEM_INDEX)
     private int index;
@@ -65,12 +67,12 @@ public class ItemManifest {
         return images[0].images;
     }
 
-    private class Provider {
+    private class Provider implements Serializable {
         @SerializedName(APIConstants.KEY_ID)
         String value;
     }
 
-    public class Body {
+    public class Body implements Serializable {
         @SerializedName(APIConstants.KEY_TYPE)
         private String type;
 
@@ -86,7 +88,7 @@ public class ItemManifest {
         }
     }
 
-    public class ImageHolder {
+    public class ImageHolder implements Serializable {
 
         @SerializedName(APIConstants.KEY_LINKS)
         private ImageSizes images;
@@ -95,7 +97,7 @@ public class ItemManifest {
             return images;
         }
 
-        public class ImageSizes {
+        public class ImageSizes implements Serializable {
 
             @SerializedName(APIConstants.KEY_IMAGE_SMALL)
             private Image small;
@@ -125,7 +127,7 @@ public class ItemManifest {
                 return original.href;
             }
 
-            private class Image {
+            private class Image implements Serializable {
                 @SerializedName(APIConstants.KEY_HREF)
                 String href;
 
