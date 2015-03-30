@@ -6,10 +6,6 @@
     android:id="@+id/popularitem_card"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    android:focusable="true"
-    android:clickable="true"
-    android:foreground="@drawable/selectable_item"
-    android:layout_marginTop="16dp"
     card_view:cardCornerRadius="0dp"
     card_view:contentPadding="0dp"
     card_view:cardUseCompatPadding="true"
@@ -17,14 +13,8 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <ImageView
-            android:id="@+id/popularitem_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="center"
-            tools:src="@drawable/item_image"/>
+        android:layout_height="match_parent"
+        android:background="@drawable/selectable_item">
 
         <TextView
             android:id="@+id/popularitem_title"

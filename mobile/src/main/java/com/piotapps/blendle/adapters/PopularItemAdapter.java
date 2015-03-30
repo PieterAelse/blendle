@@ -30,8 +30,17 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
+    public interface OnItemSelectedListener {
+        void onItemSelected(PopularItems.EmbeddedList.PopularItem pi);
+    }
+
+    private interface OnInternalItemSelectedListener {
+        void onItemSelected(int position);
+    }
+
     private boolean showLoading;
     private List<PopularItems.EmbeddedList.PopularItem> items;
+    private OnItemSelectedListener listener;
 
     public PopularItemAdapter() {
         items = new ArrayList<>();
@@ -45,7 +54,7 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         .from(parent.getContext())
                         .inflate(R.layout.item_popular, parent, false);
 
-                return new ItemViewHolder(item);
+                return new ItemViewHolder(item, internalItemSelectedListener);
             case TYPE_FOOTER:
                 View footer = LayoutInflater
                         .from(parent.getContext())
@@ -64,11 +73,14 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             ItemManifest.ImageHolder.ImageSizes is = pi.getFirstImage();
             if (is != null) {
-                Picasso.with(item.mCover.getContext()).load(is.getUrlMedium()).into(item.mCover);
+                Picasso.with(item.imgCover.getContext()).load(is.getUrlMedium()).into(item.imgCover);
             } else {
-                item.mCover.setImageDrawable(null);
+                item.imgCover.setImageDrawable(null);
             }
-            item.mTitle.setText(Html.fromHtml(pi.getHeadline()));
+            item.tvTitle.setText(Html.fromHtml(pi.getHeadline()));
+
+            // Set the position to tag to use in listeners
+            item.position = position;
         }
     }
 
@@ -87,6 +99,23 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         }
 
         return TYPE_ITEM;
+    }
+
+    private final OnInternalItemSelectedListener internalItemSelectedListener = new OnInternalItemSelectedListener() {
+        @Override
+        public void onItemSelected(final int position) {
+            if (listener != null) {
+                listener.onItemSelected(items.get(position));
+            }
+        }
+    };
+
+    public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
+        listener = onItemSelectedListener;
+    }
+
+    public void removeOnItemSelectedListener() {
+        listener = null;
     }
 
     public boolean isShowLoading() {
@@ -109,15 +138,26 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return items;
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @InjectView(R.id.popularitem_title)
-        TextView mTitle;
+        TextView tvTitle;
         @InjectView(R.id.popularitem_image)
-        ImageView mCover;
+        ImageView imgCover;
 
-        public ItemViewHolder(View view) {
+        private OnInternalItemSelectedListener listener;
+        int position;
+
+        public ItemViewHolder(View view, OnInternalItemSelectedListener listener) {
             super(view);
             ButterKnife.inject(this, view);
+
+            this.listener = listener;
+            view.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            listener.onItemSelected(position);
         }
     }
 

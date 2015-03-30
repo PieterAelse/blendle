@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.piotapps.blendle" >
+          package="com.piotapps.blendle" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -18,6 +18,37 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ArticleActivity"
+            android:label="@string/title_article"
+            android:parentActivityName=".MainActivity">
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.piotapps.blendle.MainActivity" />
+        </activity>
+
+        <activity android:name=".DreamSettingsActivity"
+                  android:label="@string/title_dream_settings" />
+
+        <service
+            android:name="com.piotapps.blendle.services.BlendleDreamService"
+            android:exported="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/title_dream"
+            android:permission="android.permission.BIND_DREAM_SERVICE">
+
+            <intent-filter>
+                <action android:name="android.service.dreams.DreamService" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- Point to additional information for this dream (optional) -->
+            <meta-data
+                android:name="android.service.dream"
+                android:resource="@xml/blendle_dream" />
+        </service>
+
     </application>
 
 </manifest>

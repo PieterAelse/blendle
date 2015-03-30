@@ -2,4 +2,7 @@
     <string name="app_name">Blendle by Pieter Otten</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_madeby">Made by Pieter Otten</string>
+    <string name="title_article">Blendle article</string>
+    <string name="title_dream">Blendle articles</string>
+    <string name="title_dream_settings">Blendle dream settings</string>
 </resources>

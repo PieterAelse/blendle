@@ -1,5 +1,6 @@
 package com.piotapps.blendle.fragments;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.piotapps.blendle.ArticleActivity;
 import com.piotapps.blendle.BaseActivity;
 import com.piotapps.blendle.R;
 import com.piotapps.blendle.adapters.PopularItemAdapter;
@@ -65,15 +67,24 @@ public class PopularTodayFragment extends BaseFragment implements AsynCallback {
         recyclerView.setLayoutManager(layoutManager);
 
         adapter = new PopularItemAdapter();
+        adapter.setOnItemSelectedListener(onItemSelectedListener);
         recyclerView.setAdapter(adapter);
         recyclerView.setOnScrollListener(new MyRecyclerScrollListener());
         recyclerView.setHorizontalScrollBarEnabled(!inPortrait);
         recyclerView.setVerticalScrollBarEnabled(inPortrait);
+        recyclerView.setHasFixedSize(true);
 
 //        updateUIToLoadingState();
 //        adapter.addItems(StorageUtils.getSavedPopularItems(getActivity().getApplicationContext())); // TODO: if we use this, also save next URL to load
         fetchMoreItems();
     }
+
+    private final PopularItemAdapter.OnItemSelectedListener onItemSelectedListener = new PopularItemAdapter.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(PopularItems.EmbeddedList.PopularItem pi) {
+            startActivity(new Intent(getActivity().getApplicationContext(), ArticleActivity.class));
+        }
+    };
 
     private void fetchMoreItems() {
         // TODO add wifi/3g connection check

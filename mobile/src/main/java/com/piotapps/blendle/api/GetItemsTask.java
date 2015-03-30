@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 import com.google.gson.Gson;
+import com.piotapps.blendle.BuildConfig;
 import com.piotapps.blendle.interfaces.AsynCallback;
 import com.piotapps.blendle.pojo.PopularItems;
 import com.squareup.okhttp.OkHttpClient;
@@ -27,12 +28,14 @@ public class GetItemsTask extends AsyncTask<String, Integer, PopularItems> {
         OkHttpClient client = new OkHttpClient();
         Gson gson = new Gson();
 
-        // Used for debugging loading state
-//        try {
-//            Thread.sleep(3000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        // Introduce a small delay at debug to simulate slow connections
+        if (BuildConfig.DEBUG) {
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
         Request request = new Request.Builder().url(url).build();
         try {

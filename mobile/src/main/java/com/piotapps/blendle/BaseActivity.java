@@ -4,6 +4,7 @@ import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -64,6 +65,15 @@ public class BaseActivity extends ActionBarActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_madeBy:
+                // Don't do anything
+                return true;
+            case android.R.id.home:
+                if(!isTaskRoot()) {
+                    onBackPressed();
+                } else {
+                    // For when started by NFC
+                    NavUtils.navigateUpFromSameTask(this);
+                }
                 return true;
         }
 
