@@ -9,6 +9,7 @@
     <!-- MESSAGES -->
     <string name="message_welcome">Welkom! Dit is Blendle door Pieter Otten</string>
     <string name="message_daydream_hint">Zorg ervoor dat Daydream is ingeschakeld en dat de Blendle Daydream geselecteerd is</string>
+    <string name="message_nfc_hint">Pssst… Probeer je apparaat met NFC eens tegen een ander apparaat aan te houden om dit artikel te delen!</string>
 
     <!-- ACTIONS -->
     <string name="action_madeby">Gemaakt door Pieter Otten</string>

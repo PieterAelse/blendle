@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.piotapps.blendle" >
 
+    <uses-feature android:name="android.hardware.nfc" android:required="false" />
+
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.NFC" />
 
     <application
         android:allowBackup="true"
@@ -26,6 +29,14 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.piotapps.blendle.MainActivity" />
+
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="https"
+                      android:host="ws.blendle.nl"
+                      android:pathPrefix="/item" />
+            </intent-filter>
         </activity>
 
         <activity android:name=".DreamSettingsActivity"

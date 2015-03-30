@@ -16,7 +16,6 @@ import com.piotapps.blendle.R;
 import com.piotapps.blendle.adapters.PopularItemAdapter;
 import com.piotapps.blendle.api.APIConstants;
 import com.piotapps.blendle.api.GetItemsTask;
-import com.piotapps.blendle.interfaces.AsynCallback;
 import com.piotapps.blendle.pojo.PopularItems;
 import com.piotapps.blendle.utils.StorageUtils;
 
@@ -28,7 +27,7 @@ import butterknife.InjectView;
 /**
  * TODO
  */
-public class PopularTodayFragment extends BaseFragment implements AsynCallback {
+public class PopularTodayFragment extends BaseFragment implements GetItemsTask.AsynCallback {
 
     private static final String KEY_URL_TO_LOAD_NEXT = "url_to_load_next";
 
@@ -90,7 +89,9 @@ public class PopularTodayFragment extends BaseFragment implements AsynCallback {
     private final PopularItemAdapter.OnItemSelectedListener onItemSelectedListener = new PopularItemAdapter.OnItemSelectedListener() {
         @Override
         public void onItemSelected(PopularItems.EmbeddedList.PopularItem pi) {
-            startActivity(new Intent(getActivity().getApplicationContext(), ArticleActivity.class));
+            final Intent articleIntent = new Intent(getActivity().getApplicationContext(), ArticleActivity.class);
+            articleIntent.putExtra(ArticleActivity.EXTRA_ARTICLE_INSTANCE, pi);
+            startActivity(articleIntent);
         }
     };
 

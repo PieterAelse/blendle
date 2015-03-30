@@ -12,22 +12,22 @@ import com.squareup.okhttp.Response;
 
 import java.io.IOException;
 
-public class GetItemsTask extends AsyncTask<String, Integer, PopularItems> {
+public class GetOneItemTask extends AsyncTask<String, Integer, PopularItems.EmbeddedList.PopularItem> {
 
     public interface AsynCallback {
         void started();
         void progress();
-        void ended(PopularItems pi);
+        void ended(PopularItems.EmbeddedList.PopularItem pi);
     }
 
     private AsynCallback callback;
 
-    public GetItemsTask(@NonNull AsynCallback callback) {
+    public GetOneItemTask(@NonNull AsynCallback callback) {
         this.callback = callback;
     }
 
     @Override
-    protected PopularItems doInBackground(String... params) {
+    protected PopularItems.EmbeddedList.PopularItem doInBackground(String... params) {
         final String url = params[0];
 
         OkHttpClient client = new OkHttpClient();
@@ -46,7 +46,7 @@ public class GetItemsTask extends AsyncTask<String, Integer, PopularItems> {
         try {
             Response response = client.newCall(request).execute();
             if (response.isSuccessful()) {
-                return gson.fromJson(response.body().charStream(), PopularItems.class);
+                return gson.fromJson(response.body().charStream(), PopularItems.EmbeddedList.PopularItem.class);
             } else {
                 return null;
             }
@@ -71,7 +71,7 @@ public class GetItemsTask extends AsyncTask<String, Integer, PopularItems> {
     }
 
     @Override
-    protected void onPostExecute(PopularItems pi) {
+    protected void onPostExecute(PopularItems.EmbeddedList.PopularItem pi) {
         super.onPostExecute(pi);
 
         callback.ended(pi);

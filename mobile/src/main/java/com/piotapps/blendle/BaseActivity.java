@@ -101,11 +101,11 @@ public class BaseActivity extends ActionBarActivity {
     }
 
     protected void showMessage(@NonNull @StringRes final int resourceId) {
-        SnackbarManager.show(Snackbar.with(this).text(resourceId).colorResource(R.color.blende_red));
+        showMessage(getString(resourceId));
     }
 
     // Should only be used on debug occasions :)
     protected void showMessage(@NonNull final String message) {
-        SnackbarManager.show(Snackbar.with(this).text(message).colorResource(R.color.blende_red));
+        SnackbarManager.show(Snackbar.with(this).text(message).colorResource(R.color.blende_red).swipeToDismiss(true));
     }
 }
