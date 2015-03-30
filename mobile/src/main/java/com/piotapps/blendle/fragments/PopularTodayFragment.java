@@ -30,6 +30,8 @@ import butterknife.InjectView;
  */
 public class PopularTodayFragment extends BaseFragment implements AsynCallback {
 
+    private static final String KEY_URL_TO_LOAD_NEXT = "url_to_load_next";
+
     @InjectView(R.id.main_progress)
     ProgressBar progress;
     @InjectView(R.id.main_recyclerview)
@@ -61,6 +63,7 @@ public class PopularTodayFragment extends BaseFragment implements AsynCallback {
         super.onViewCreated(view, savedInstanceState);
 
         final boolean inPortrait = getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+
         layoutManager= new LinearLayoutManager(getActivity().getApplicationContext());
         layoutManager.setOrientation(inPortrait ? LinearLayoutManager.VERTICAL : LinearLayoutManager.HORIZONTAL);
         layoutManager.setSmoothScrollbarEnabled(true);
@@ -74,9 +77,14 @@ public class PopularTodayFragment extends BaseFragment implements AsynCallback {
         recyclerView.setVerticalScrollBarEnabled(inPortrait);
         recyclerView.setHasFixedSize(true);
 
-//        updateUIToLoadingState();
-//        adapter.addItems(StorageUtils.getSavedPopularItems(getActivity().getApplicationContext())); // TODO: if we use this, also save next URL to load
-        fetchMoreItems();
+        // Only fetch items when not rotated, else reload from storage
+        if (savedInstanceState == null) {
+            fetchMoreItems();
+        } else {
+            progress.setVisibility(View.GONE);
+            nextToLoadUrl = savedInstanceState.getString(KEY_URL_TO_LOAD_NEXT);
+            adapter.addItems(StorageUtils.getSavedPopularItems(getActivity().getApplicationContext()));
+        }
     }
 
     private final PopularItemAdapter.OnItemSelectedListener onItemSelectedListener = new PopularItemAdapter.OnItemSelectedListener() {
@@ -86,14 +94,13 @@ public class PopularTodayFragment extends BaseFragment implements AsynCallback {
         }
     };
 
-    private void fetchMoreItems() {
-        // TODO add wifi/3g connection check
-        if (nextToLoadUrl == null) {
-            showMessage("END OF POPULAR ITEMS REACHED. SHOW EASTER EGGY");
-            return;
-        }
 
-        new GetItemsTask(this).execute(nextToLoadUrl);
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        // Save the url to load next for screen rotations etc.
+        outState.putString(KEY_URL_TO_LOAD_NEXT, nextToLoadUrl);
     }
 
     @Override
@@ -124,6 +131,17 @@ public class PopularTodayFragment extends BaseFragment implements AsynCallback {
             // Save link to load next
             nextToLoadUrl = pi.getLinks().getNext();
         }
+    }
+
+    private void fetchMoreItems() {
+        // TODO add wifi/3g connection check
+        if (nextToLoadUrl == null) {
+            showMessage("END OF POPULAR ITEMS REACHED. SHOW EASTER EGGY");
+            return;
+        }
+
+        // Fetch the next page on a background thread
+        new GetItemsTask(this).execute(nextToLoadUrl);
     }
 
     private void updateUIToLoadingState() {

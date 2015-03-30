@@ -8,9 +8,7 @@ import com.piotapps.blendle.pojo.PopularItems;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -38,9 +36,7 @@ public class StorageUtils {
             FileOutputStream fos = context.openFileOutput(STORAGE_FILENAME, Context.MODE_PRIVATE);
             fos.write(bos.toByteArray());
             fos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) { //FileNotFoundException or IOException
             e.printStackTrace();
         }
     }
@@ -56,8 +52,7 @@ public class StorageUtils {
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
             return (List<PopularItems.EmbeddedList.PopularItem>) objectInputStream.readObject();
-        } catch (FileNotFoundException fnfe) {
-        } catch (Exception e) {
+        } catch (Exception e) {  //FileNotFoundException or IOException
             e.printStackTrace();
         }
         return new ArrayList<>();

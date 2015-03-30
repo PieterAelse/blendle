@@ -1,8 +1,30 @@
 <resources>
+
+    <!-- TITLES -->
     <string name="app_name">Blendle by Pieter Otten</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_madeby">Made by Pieter Otten</string>
     <string name="title_article">Blendle article</string>
     <string name="title_dream">Blendle articles</string>
-    <string name="title_dream_settings">Blendle dream settings</string>
+    <string name="title_dream_settings">Blendle Daydream settings</string>
+
+    <!-- MESSAGES -->
+    <string name="message_welcome">Welcome! This is Blendle by Pieter Otten</string>
+    <string name="message_daydream_hint">Now make sure that Daydream is enabled and the Blendle Daydream is selected</string>
+
+    <!-- ACTIONS -->
+    <string name="action_madeby">Made by Pieter Otten</string>
+    <string name="action_setup_daydream">Open Daydream setup</string>
+
+    <!-- DIALOGS -->
+    <string name="dialog_btn_yes">Yes</string>
+    <string name="dialog_btn_no">No</string>
+    <string name="dialog_btn_cancel">Cancel</string>
+    <string name="dialog_title_daydream_enable">Enable Daydreams?</string>
+    <string name="dialog_message_daydream_enable">This Blendle app has a Daydream function. This is a screensaver which shows the popular items of today when your device is docked or charging.\n\nWould you like to try out the Blendle Daydream?</string>
+    <string name="dialog_title_daydream_select">Select Blendle Daydream</string>
+    <string name="dialog_message_daydream_select">We\'ve detected that you\'ve enabled Daydream but have not selected the Blendle Daydream. Would you like to change that?</string>
+
+    <!-- ERRORS -->
+    <string name="error_daydream_startsettings">Could not find the Daydream settings page. Please find the settings in your default settings menu.</string>
+
+    <!-- SETTINGS -->
 </resources>

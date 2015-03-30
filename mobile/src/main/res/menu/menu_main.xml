@@ -3,8 +3,14 @@
       xmlns:app="http://schemas.android.com/apk/res-auto"
       tools:context=".MainActivity">
 
+    <item android:id="@+id/action_setup_daydream"
+          android:title="@string/action_setup_daydream"
+          android:orderInCategory="100"
+          app:showAsAction="never"/>
+
     <item android:id="@+id/action_madeBy"
           android:title="@string/action_madeby"
           android:orderInCategory="100"
+          android:enabled="false"
           app:showAsAction="never"/>
 </menu>

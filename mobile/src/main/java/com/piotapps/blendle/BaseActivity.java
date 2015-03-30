@@ -1,6 +1,9 @@
 package com.piotapps.blendle;
 
+import android.annotation.TargetApi;
+import android.content.ActivityNotFoundException;
 import android.graphics.PorterDuff;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
@@ -16,6 +19,7 @@ import android.widget.ProgressBar;
 
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
+import com.piotapps.blendle.utils.DayDreamUtils;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -58,14 +62,26 @@ public class BaseActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            // Daydreams not available => hide menu option
+            menu.findItem(R.id.action_setup_daydream).setVisible(false);
+        }
         return true;
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_madeBy:
                 // Don't do anything
+                return true;
+            case R.id.action_setup_daydream:
+                try {
+                    DayDreamUtils.startDayDreamsSettings(this);
+                } catch (ActivityNotFoundException e) {
+                    showMessage(R.string.error_daydream_startsettings);
+                }
                 return true;
             case android.R.id.home:
                 if(!isTaskRoot()) {

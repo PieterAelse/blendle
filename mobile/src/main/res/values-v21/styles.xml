@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="BlendleTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:colorPrimary">@color/blende_red</item>
+        <item name="android:colorPrimaryDark">@color/blende_red_dark</item>
+        <item name="android:colorAccent">@color/blende_accent</item>
+
+        <item name="colorPrimary">@color/blende_red</item>
+        <item name="colorPrimaryDark">@color/blende_red_dark</item>
+        <item name="colorAccent">@color/blende_accent</item>
+        <item name="android:alertDialogTheme">@style/Theme.AlertDialog</item>
+    </style>
+
+    <style name="Theme.AlertDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:colorPrimary">@color/blende_red</item>
+        <item name="android:colorPrimaryDark">@color/blende_red_dark</item>
+        <item name="android:colorAccent">@color/blende_accent</item>
+    </style>
+
+
+</resources>
