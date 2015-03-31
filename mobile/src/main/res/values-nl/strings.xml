@@ -4,12 +4,16 @@
     <string name="app_name">Blendle door Pieter Otten</string>
     <string name="title_article">Blendle artikel</string>
     <string name="title_dream">Blendle artikelen</string>
+    <string name="title_popular_items">Populaire artikelen</string>
     <string name="title_dream_settings">Blendle Dayddream instellingen</string>
 
     <!-- MESSAGES -->
     <string name="message_welcome">Welkom! Dit is Blendle door Pieter Otten</string>
+    <string name="message_loading_items">Meer items worden geladen…</string>
     <string name="message_daydream_hint">Zorg ervoor dat Daydream is ingeschakeld en dat de Blendle Daydream geselecteerd is</string>
-    <string name="message_nfc_hint">Pssst… Probeer je apparaat met NFC eens tegen een ander apparaat aan te houden om dit artikel te delen!</string>
+    <string name="message_daydream_settings">Daydream instellingen kunnen hier veranderd worden:)</string>
+    <string name="message_article_bought">Je hebt dit artikel gekocht! Veel plezier ermee :)</string>
+    <string name="message_nfc_share_try">Probeer het maar eens! :)</string>
 
     <!-- ACTIONS -->
     <string name="action_madeby">Gemaakt door Pieter Otten</string>
@@ -18,11 +22,14 @@
     <!-- DIALOGS -->
     <string name="dialog_btn_yes">Ja</string>
     <string name="dialog_btn_no">Nee</string>
+    <string name="dialog_btn_cool">Cool!</string>
     <string name="dialog_btn_cancel">Annuleren</string>
     <string name="dialog_title_daydream_enable">Daydream aanzetten?</string>
     <string name="dialog_message_daydream_enable">Deze Blendle app heeft een Daydream functie. Dit is een screensaver die de populaire artikelen van vandaag toont wanneer je toestel gedocked is of aan de oplader ligt.\n\nWil je onze Blendle Daydream eens proberen?</string>
     <string name="dialog_title_daydream_select">Selecteer Blendle Daydream</string>
     <string name="dialog_message_daydream_select">We hebben gedetecteerd dat je Daydream aan hebt staan, maar je niet de Blendle Daydream geselecteerd hebt\n\n. Wil je de Blendle Daydream gebruiken?</string>
+    <string name="dialog_title_nfc_sharing">NFC share article</string>
+    <string name="dialog_message_nfc_sharing">Pssst… Om dit artikel te delen kun je dit toestel met NFC eens tegen een ander NFC toestel (met deze Blendle app erop) aan houden! Supersimpel! :)</string>
 
     <!-- ERRORS -->
     <string name="error_daydream_startsettings">Het standaard Daydream instellingenscherm kon niet gevonden worden. Open het instellingenmenu en probeer Daydream te vinden.</string>

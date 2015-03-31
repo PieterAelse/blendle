@@ -1,13 +1,19 @@
 package com.piotapps.blendle.fragments;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ProgressBar;
 
 import com.piotapps.blendle.ArticleActivity;
@@ -18,11 +24,14 @@ import com.piotapps.blendle.api.APIConstants;
 import com.piotapps.blendle.api.GetItemsTask;
 import com.piotapps.blendle.pojo.PopularItems;
 import com.piotapps.blendle.utils.StorageUtils;
+import com.piotapps.blendle.utils.Utils;
 
 import java.util.Arrays;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+import static com.nineoldandroids.view.ViewPropertyAnimator.animate;
 
 /**
  * TODO
@@ -31,6 +40,10 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
 
     private static final String KEY_URL_TO_LOAD_NEXT = "url_to_load_next";
 
+    @InjectView(R.id.main_header)
+    Toolbar header;
+    @InjectView(R.id.main_swiperefreshlayout)
+    SwipeRefreshLayout swipeRefreshLayout;
     @InjectView(R.id.main_progress)
     ProgressBar progress;
     @InjectView(R.id.main_recyclerview)
@@ -62,6 +75,25 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
         super.onViewCreated(view, savedInstanceState);
 
         final boolean inPortrait = getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+
+        header.setVisibility(inPortrait ? View.VISIBLE : View.GONE);
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Create new adapter to reset all current items
+                adapter = new PopularItemAdapter();
+                adapter.setOnItemSelectedListener(onItemSelectedListener);
+                recyclerView.setAdapter(adapter);
+
+                // Reset link
+                nextToLoadUrl = APIConstants.URL_POPULAR_ITEMS;
+
+                // And load the items :)
+                fetchMoreItems();
+            }
+        });
+        swipeRefreshLayout.setColorSchemeResources(R.color.blende_red_dark, R.color.blende_red_dark_transparent, R.color.blende_red_transparent, R.color.blende_red);
 
         layoutManager= new LinearLayoutManager(getActivity().getApplicationContext());
         layoutManager.setOrientation(inPortrait ? LinearLayoutManager.VERTICAL : LinearLayoutManager.HORIZONTAL);
@@ -147,6 +179,7 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
 
     private void updateUIToLoadingState() {
         if (nextToLoadUrl.equals(APIConstants.URL_POPULAR_ITEMS)) {
+            swipeRefreshLayout.setRefreshing(isLoadingItems);
             // Show/Hide main progressbar
             progress.setVisibility(isLoadingItems ? View.VISIBLE : View.GONE);
         } else {
@@ -156,9 +189,34 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+    public void hideHeader() {
+        swipeRefreshLayout.setProgressViewOffset(false, 0, header.getHeight());
+
+        if (Utils.canAnimate()) {
+            header.animate().translationY(-header.getHeight()).setInterpolator(new AccelerateInterpolator(1.5f));
+        } else {
+            animate(header).translationY(-header.getHeight()).setInterpolator(new AccelerateInterpolator(1.5f));
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
+    public void showHeader() {
+        swipeRefreshLayout.setProgressViewOffset(false, 0, (int)(1.5 * header.getHeight()));
+
+        if (Utils.canAnimate()) {
+            header.animate().translationY(0).setInterpolator(new DecelerateInterpolator(1.5f));
+        } else {
+            animate(header).translationY(0).setInterpolator(new DecelerateInterpolator(1.5f));
+        }
+    }
+
     private final class MyRecyclerScrollListener extends RecyclerView.OnScrollListener {
 
-        private static final int ITEMS_OFFSET = 3;
+        private static final int ITEMS_OFFSET = 2;
+        private static final int HIDE_THRESHOLD = 20;
+        private int scrolledDistance = 0;
+        private boolean controlsVisible = true;
 
         public void onScrollStateChanged(RecyclerView recyclerView, int newState){
             if(newState == RecyclerView.SCROLL_STATE_IDLE) {
@@ -169,6 +227,20 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
             }
         }
 
-        public void onScrolled(RecyclerView recyclerView, int dx, int dy){}
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy){
+            if (scrolledDistance > HIDE_THRESHOLD && controlsVisible) {
+                hideHeader();
+                controlsVisible = false;
+                scrolledDistance = 0;
+            } else if (scrolledDistance < -HIDE_THRESHOLD && !controlsVisible) {
+                showHeader();
+                controlsVisible = true;
+                scrolledDistance = 0;
+            }
+
+            if((controlsVisible && dy>0) || (!controlsVisible && dy<0)) {
+                scrolledDistance += dy;
+            }
+        }
     }
 }

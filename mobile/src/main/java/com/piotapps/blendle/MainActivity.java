@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +28,13 @@ public class MainActivity extends BaseActivity {
                     .replace(R.id.main_fragmentHolder, PopularTodayFragment.newInstance())
                     .commit();
 
-            checkDayDreamSettings();
+            // Check Daydream settings after 4 seconds, that way the content should have already loaded :)
+            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    checkDayDreamSettings();
+                }
+            }, 3000);
         }
     }
 

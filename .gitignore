@@ -1,7 +1,5 @@
 ### Android ###
 # Built application files
-*.apk
-!APK/*.apk #but keep APK in this folder
 *.ap_
 
 # Files for the Dalvik VM

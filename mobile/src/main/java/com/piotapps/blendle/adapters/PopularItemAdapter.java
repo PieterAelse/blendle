@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.piotapps.blendle.R;
 import com.piotapps.blendle.pojo.ItemManifest;
 import com.piotapps.blendle.pojo.PopularItems;
+import com.piotapps.blendle.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -71,13 +72,32 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             final ItemViewHolder item = (ItemViewHolder)holder;
             final PopularItems.EmbeddedList.PopularItem pi = items.get(position);
 
-            ItemManifest.ImageHolder.ImageSizes is = pi.getFirstImage();
+            // Provider logo
+            final String logoUrl = Utils.getLogoUrl(pi.getItemProvider());
+            Picasso.with(item.imgLogo.getContext()).load(logoUrl).error(R.mipmap.ic_launcher).into(item.imgLogo);
+
+            // Item photo
+            final ItemManifest.ImageHolder.ImageSizes is = pi.getFirstImage();
             if (is != null) {
+                item.imgCover.setVisibility(View.VISIBLE);
                 Picasso.with(item.imgCover.getContext()).load(is.getUrlMedium()).into(item.imgCover);
             } else {
                 item.imgCover.setImageDrawable(null);
             }
-            item.tvTitle.setText(Html.fromHtml(pi.getHeadline()));
+            item.imgCover.setVisibility(is != null ? View.VISIBLE : View.GONE);
+
+            // Price
+            item.tvPrice.setText(pi.getPrice());
+
+            // Headline1
+            final String headline1 = pi.getHeadline1();
+            item.tvHeadline.setText(Html.fromHtml(headline1));
+            item.tvHeadline.setVisibility(headline1 != null ? View.VISIBLE : View.GONE);
+
+            // Content
+            final String content = pi.getContent();
+            item.tvContent.setText(Html.fromHtml(content));
+            item.tvContent.setVisibility(content != null ? View.VISIBLE : View.GONE);
 
             // Set the position to tag to use in listeners
             item.position = position;
@@ -139,10 +159,16 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @InjectView(R.id.popularitem_title)
-        TextView tvTitle;
+        @InjectView(R.id.popularitem_logo)
+        ImageView imgLogo;
+        @InjectView(R.id.popularitem_price)
+        TextView tvPrice;
         @InjectView(R.id.popularitem_image)
         ImageView imgCover;
+        @InjectView(R.id.popularitem_headline)
+        TextView tvHeadline;
+        @InjectView(R.id.popularitem_content)
+        TextView tvContent;
 
         private OnInternalItemSelectedListener listener;
         int position;

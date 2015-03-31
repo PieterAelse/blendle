@@ -76,8 +76,12 @@ public class PopularItems {
                 return embedded.manifest.getBodies(); // TODO split into getHeadline, getLead etc..?
             }
 
-            public String getHeadline() {
-                return embedded.manifest.getBodies()[0].getContent(); // TODO: fixme
+            public String getHeadline1() {
+                return findInBody(APIConstants.KEY_BODY_HEADLINE_1);
+            }
+
+            public String getContent() {
+                return findInBody(APIConstants.KEY_BODY_PARAGRAPH);
             }
 
             public ItemManifest.ImageHolder[] getImages() {
@@ -89,7 +93,16 @@ public class PopularItems {
             }
 
             public String getPrice() {
-                return price;
+                return "\u20ac " + price.replace('.', ',');
+            }
+
+            private String findInBody(final String type) {
+                for (ItemManifest.Body b : embedded.manifest.getBodies()) {
+                    if (b.getType().equals(type)) {
+                        return b.getContent();
+                    }
+                }
+                return null;
             }
 
             public class Embedded implements Serializable {

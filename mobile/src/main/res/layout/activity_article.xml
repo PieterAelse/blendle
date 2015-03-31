@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        style="@style/BlendeScrollbarStyle"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp">
+
+        <RelativeLayout
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/article_header"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize">
+
+                <TextView
+                    android:id="@+id/article_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginRight="8dp"
+                    android:gravity="center_vertical"
+                    tools:text="13,37 euro"
+                    style="@style/BlendlePriceTileStyle"/>
+
+                <ImageView
+                    android:id="@+id/article_logo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginTop="4dp"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="Publisher logo"
+                    android:maxWidth="128dp"
+                    android:scaleType="fitCenter"
+                    tools:src="@drawable/logo"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/blende_red_dark_transparent"/>
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/article_image"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/article_header"
+                android:adjustViewBounds="true"
+                android:contentDescription="Article photo"
+                android:scaleType="centerCrop"
+                android:maxHeight="300dp"
+                tools:src="@drawable/item_image"
+                tools:visibility="visible"/>
+
+            <TextView
+                android:id="@+id/article_headline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignWithParentIfMissing="true"
+                android:layout_below="@id/article_image"
+                android:layout_marginBottom="12dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                tools:text="Wow dit is een pakkende headline! Ik MOET dit artikeltje lezen!\nWauwie."
+                style="@style/BlendleHeadlineStyle"
+                android:maxLines="1337"/>
+
+            <TextView
+                android:id="@+id/article_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@id/article_headline"
+                android:paddingBottom="-16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                tools:text="Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing."
+                style="@style/BlendleContentStyle"
+                android:maxLines="1337"/>
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+    <com.software.shell.fab.ActionButton
+        android:id="@+id/article_btnBuy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="24dp"
+        android:visibility="gone"
+        fab:type="DEFAULT"
+        fab:button_color="@color/blende_red"
+        fab:button_colorPressed="@color/blende_red_dark"
+        fab:show_animation="@anim/fab_roll_from_right"
+        fab:image="@drawable/ic_action_buy"
+        fab:image_size="40dp"
+        />
+
+    <ProgressBar
+        android:id="@+id/article_progress"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"
+        android:indeterminate="true"
+        android:indeterminateOnly="true"
+        android:visibility="gone"/>
+
+</RelativeLayout>

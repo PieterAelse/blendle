@@ -9,8 +9,12 @@ public class APIConstants {
     // Sub pages
     public static final String PAGE_POPULAR_ITEMS = "items_popular";
 
-    // General Keys
+    // Keys, keys everywhere!
     public static final String KEY_ID = "id";
+    public static final String KEY_NAME = "name";
+    public static final String KEY_TEMPLATES = "templates";
+    public static final String KEY_TEMPLATE_TILE = "tile";
+    public static final String KEY_TEMPLATE_ITEM_CONTENT = "item_content";
     public static final String KEY_DATE = "date";
     public static final String KEY_LINKS = "_links";
     public static final String KEY_HREF = "href";
@@ -18,9 +22,9 @@ public class APIConstants {
     public static final String KEY_PREVIOUS = "prev";
     public static final String KEY_NEXT = "next";
     public static final String KEY_ITEM_CONTENT = "item_content";
-
-    // Items keys
     public static final String KEY_EMBEDDED = "_embedded";
+    public static final String KEY_PROVIDER_CONFIGURATIONS = "provider_configurations";
+    public static final String KEY_CONFIGURATIONS= "configurations";
     public static final String KEY_ITEMS = "items";
     public static final String KEY_PRICE = "price";
     public static final String KEY_MANIFEST = "manifest";
@@ -47,5 +51,5 @@ public class APIConstants {
     public static final String KEY_BODY_PARAGRAPH = "p";
     public static final String KEY_BODY_PARAGRAPH_HEADER = "ph";
     public static final String KEY_BODY_LEAD = "lead";
-
+    // TODO: implement the other body types
 }

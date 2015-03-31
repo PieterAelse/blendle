@@ -7,6 +7,9 @@ import java.io.Serializable;
 
 public class Links implements Serializable {
 
+    @SerializedName(APIConstants.PAGE_POPULAR_ITEMS)
+    private Href popularItems;
+
     @SerializedName(APIConstants.KEY_SELF)
     private Href self;
 
@@ -18,6 +21,10 @@ public class Links implements Serializable {
 
     @SerializedName(APIConstants.KEY_ITEM_CONTENT)
     private Href itemContent;
+
+    public String getPopularItemsUrl() {
+        return popularItems.value;
+    }
 
     public String getSelf() {
         return self.value;
