@@ -26,7 +26,7 @@ From left to right:
 ![Screenshots of Blendle by Pieter Otten](https://raw.githubusercontent.com/PieterAelse/blendle/master/Screenshots/Blendle_PieterOtten_Screenshots.png "Screenshots of Blendle by Pieter Otten")
 
 # Demo movie
-[TODO: YouTube]
+[![Demo movie, click to view!](https://raw.githubusercontent.com/PieterAelse/blendle/master/Screenshots/screenshot_video.png)](http://youtu.be/7T6BsbV8ee4)
 
 # Downloading the APK 
 [Click here to download the latest APK!](https://raw.githubusercontent.com/PieterAelse/blendle/master/APK/Blendle_by_PieterOtten.apk "Blendle by PieterOtten")
