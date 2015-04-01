@@ -31,7 +31,7 @@ public class MainActivity extends BaseActivity {
 
             if (Utils.canDaydream()) {
                 // Check Daydream settings after 4 seconds, that way the content should have already loaded :)
-                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                delayHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         checkDayDreamSettings();

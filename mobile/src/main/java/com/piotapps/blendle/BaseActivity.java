@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v4.app.NavUtils;
@@ -33,9 +35,14 @@ import com.squareup.picasso.Picasso;
  */
 public class BaseActivity extends ActionBarActivity {
 
+    protected Handler delayHandler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Get handler for delayed UI operations
+        delayHandler = new Handler(Looper.getMainLooper());
 
         // Workaround for showing an indeterminate progressbar in the support actionbar..
         // (since this has been removed/deprecated)
@@ -97,6 +104,14 @@ public class BaseActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Cancel all handler stuff
+        delayHandler.removeCallbacksAndMessages(null);
     }
 
     protected boolean checkInternetConnection() {

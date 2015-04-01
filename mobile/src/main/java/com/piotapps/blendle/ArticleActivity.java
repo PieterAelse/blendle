@@ -71,7 +71,7 @@ public class ArticleActivity extends BaseActivity implements GetOneItemTask.Asyn
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                         // Show hint of this function after small delay :)
-                        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                       delayHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 AlertDialog.Builder adBuilder = new AlertDialog.Builder(ArticleActivity.this);
