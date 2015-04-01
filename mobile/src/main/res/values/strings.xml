@@ -14,16 +14,21 @@
     <string name="message_daydream_settings">Daydream settings can be changed here :)</string>
     <string name="message_article_bought">You bought this article! Have fun :)</string>
     <string name="message_nfc_share_try">Let me see you give it a try! :)</string>
+    <string name="message_endofpopular_easter">No more items… Need a time machine? :)</string>
+    <string name="message_no_internet">No internet connection. Try again later!</string>
 
     <!-- ACTIONS -->
     <string name="action_madeby">Made by Pieter Otten</string>
     <string name="action_setup_daydream">Open Daydream setup</string>
 
     <!-- DIALOGS -->
+    <string name="dialog_btn_ok">OK</string>
     <string name="dialog_btn_yes">Yes</string>
     <string name="dialog_btn_no">No</string>
     <string name="dialog_btn_cancel">Cancel</string>
     <string name="dialog_btn_cool">Cool!</string>
+    <string name="dialog_title_no_internet">No internet</string>
+    <string name="dialog_message_no_internet">You don\'t seem to have an active internet connection. Please try again later!</string>
     <string name="dialog_title_daydream_enable">Enable Daydreams?</string>
     <string name="dialog_message_daydream_enable">This Blendle app has a Daydream function. This is a screensaver which shows the popular items of today when your device is docked or charging.\n\nWould you like to try out the Blendle Daydream?</string>
     <string name="dialog_title_daydream_select">Select Blendle Daydream</string>

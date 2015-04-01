@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.piotapps.blendle.fragments.PopularTodayFragment;
 import com.piotapps.blendle.services.BlendleDreamService;
 import com.piotapps.blendle.utils.DayDreamUtils;
+import com.piotapps.blendle.utils.Utils;
 
 public class MainActivity extends BaseActivity {
 
@@ -28,14 +29,18 @@ public class MainActivity extends BaseActivity {
                     .replace(R.id.main_fragmentHolder, PopularTodayFragment.newInstance())
                     .commit();
 
-            // Check Daydream settings after 4 seconds, that way the content should have already loaded :)
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    checkDayDreamSettings();
-                }
-            }, 3000);
+            if (Utils.canDaydream()) {
+                // Check Daydream settings after 4 seconds, that way the content should have already loaded :)
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkDayDreamSettings();
+                    }
+                }, 3000);
+            }
         }
+
+        checkInternetConnection();
     }
 
     private void checkDayDreamSettings() {

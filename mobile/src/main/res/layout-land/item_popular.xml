@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/popularitem_card"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginRight="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:foreground="@drawable/selectable_item"
+    card_view:cardCornerRadius="0dp"
+    card_view:cardUseCompatPadding="true"
+    card_view:contentPadding="0dp"
+    tools:layout_margin="16dp">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/popularitem_image"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:adjustViewBounds="true"
+            android:contentDescription="Article photo"
+            android:maxWidth="200dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/item_image"
+            tools:visibility="visible"/>
+
+        <TextView
+            android:id="@+id/popularitem_headline"
+            style="@style/BlendleHeadlineStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_marginBottom="12dp"
+            android:layout_marginTop="?attr/actionBarSize"
+            android:layout_toRightOf="@id/popularitem_image"
+            android:maxWidth="320dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            tools:text="Wow dit is een pakkende headline! Ik MOET dit artikeltje lezen!\nWauwie."/>
+
+        <RelativeLayout
+            android:id="@+id/popularitem_contentRegion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@id/popularitem_headline"
+            android:layout_toRightOf="@id/popularitem_image">
+
+            <TextView
+                android:id="@+id/popularitem_content"
+                style="@style/BlendleContentStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="-16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:maxWidth="320dp"
+                tools:text="Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing."/>
+
+            <View
+                android:id="@+id/popularitem_ending"
+                android:layout_width="96dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/article_ending_vertical"/>
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/article_ending_horizontal"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/popularitem_header"
+            android:layout_width="wrap_content"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_alignParentLeft="true"
+            android:layout_alignRight="@id/popularitem_contentRegion">
+
+            <TextView
+                android:id="@+id/popularitem_price"
+                style="@style/BlendlePriceTileStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="4dp"
+                android:layout_marginRight="8dp"
+                android:gravity="center_vertical"
+                tools:text="13,37 euro"/>
+
+            <ImageView
+                android:id="@+id/popularitem_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginBottom="4dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="4dp"
+                android:adjustViewBounds="true"
+                android:contentDescription="Publisher logo"
+                android:maxWidth="128dp"
+                android:scaleType="fitCenter"
+                tools:src="@drawable/logo"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:layout_alignParentBottom="true"
+                android:background="@color/blende_red_dark_transparent"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

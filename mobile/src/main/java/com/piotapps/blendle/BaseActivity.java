@@ -1,7 +1,9 @@
 package com.piotapps.blendle;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.widget.ProgressBar;
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
 import com.piotapps.blendle.utils.DayDreamUtils;
+import com.piotapps.blendle.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -62,7 +65,7 @@ public class BaseActivity extends ActionBarActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (!Utils.canDaydream()) {
             // Daydreams not available => hide menu option
             menu.findItem(R.id.action_setup_daydream).setVisible(false);
         }
@@ -94,6 +97,23 @@ public class BaseActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    protected boolean checkInternetConnection() {
+        if (!Utils.hasInternetConnection(getApplicationContext())) {
+            AlertDialog.Builder adBuilder = new AlertDialog.Builder(this);
+            adBuilder.setTitle(R.string.dialog_title_no_internet).setMessage(R.string.dialog_message_no_internet);
+            adBuilder.setPositiveButton(R.string.dialog_btn_ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            adBuilder.show();
+            return false;
+        }
+
+        return true;
     }
 
     protected void log(final String message) {

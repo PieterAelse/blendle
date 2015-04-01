@@ -76,7 +76,12 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
 
         final boolean inPortrait = getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 
-        header.setVisibility(inPortrait ? View.VISIBLE : View.GONE);
+        // Hide header and padding when in landscape
+        if(!inPortrait) {
+            header.setVisibility(View.GONE);
+            final int padding = recyclerView.getPaddingLeft();
+            recyclerView.setPadding(padding, padding, padding, padding);
+        }
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -167,14 +172,21 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
     }
 
     private void fetchMoreItems() {
-        // TODO add wifi/3g connection check
-        if (nextToLoadUrl == null) {
-            showMessage("END OF POPULAR ITEMS REACHED. SHOW EASTER EGGY");
-            return;
-        }
+        // Check internet
+        if (Utils.hasInternetConnection(getActivity().getApplicationContext())) {
 
-        // Fetch the next page on a background thread
-        new GetItemsTask(this).execute(nextToLoadUrl);
+            // Check if not at the end (if that's even possible?
+            if (nextToLoadUrl == null) {
+                showMessage(R.string.message_endofpopular_easter);
+                return;
+            }
+
+            // Fetch the next page on a background thread
+            new GetItemsTask(this).execute(nextToLoadUrl);
+        } else {
+            // No internet, show message
+            showMessage(R.string.message_no_internet);
+        }
     }
 
     private void updateUIToLoadingState() {

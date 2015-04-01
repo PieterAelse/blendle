@@ -14,20 +14,25 @@
     <string name="message_daydream_settings">Daydream instellingen kunnen hier veranderd worden:)</string>
     <string name="message_article_bought">Je hebt dit artikel gekocht! Veel plezier ermee :)</string>
     <string name="message_nfc_share_try">Probeer het maar eens! :)</string>
+    <string name="message_endofpopular_easter">Geen nieuwe items… Tijdmachine nodig? :)</string>
+    <string name="message_no_internet">Geen internet connectie. Probeer later opnieuw!</string>
 
     <!-- ACTIONS -->
     <string name="action_madeby">Gemaakt door Pieter Otten</string>
     <string name="action_setup_daydream">Open Daydream setup</string>
 
     <!-- DIALOGS -->
+    <string name="dialog_btn_ok">Oké</string>
     <string name="dialog_btn_yes">Ja</string>
     <string name="dialog_btn_no">Nee</string>
     <string name="dialog_btn_cool">Cool!</string>
     <string name="dialog_btn_cancel">Annuleren</string>
+    <string name="dialog_title_no_internet">Geen internet</string>
+    <string name="dialog_message_no_internet">Het lijkt erop alsof je geen werkende internetconnectie hebt. Probeer het later opnieuw a.u.b!</string>
     <string name="dialog_title_daydream_enable">Daydream aanzetten?</string>
     <string name="dialog_message_daydream_enable">Deze Blendle app heeft een Daydream functie. Dit is een screensaver die de populaire artikelen van vandaag toont wanneer je toestel gedocked is of aan de oplader ligt.\n\nWil je onze Blendle Daydream eens proberen?</string>
     <string name="dialog_title_daydream_select">Selecteer Blendle Daydream</string>
-    <string name="dialog_message_daydream_select">We hebben gedetecteerd dat je Daydream aan hebt staan, maar je niet de Blendle Daydream geselecteerd hebt\n\n. Wil je de Blendle Daydream gebruiken?</string>
+    <string name="dialog_message_daydream_select">We hebben gedetecteerd dat je Daydream aan hebt staan, maar je niet de Blendle Daydream geselecteerd hebt.\n\nWil je de Blendle Daydream gebruiken?</string>
     <string name="dialog_title_nfc_sharing">NFC share article</string>
     <string name="dialog_message_nfc_sharing">Pssst… Om dit artikel te delen kun je dit toestel met NFC eens tegen een ander NFC toestel (met deze Blendle app erop) aan houden! Supersimpel! :)</string>
 

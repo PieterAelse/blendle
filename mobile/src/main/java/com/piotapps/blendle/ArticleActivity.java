@@ -163,10 +163,15 @@ public class ArticleActivity extends BaseActivity implements GetOneItemTask.Asyn
         // record 0 contains the MIME type, record 1 is the AAR, if present
         String selfLink = "https://" + new String(msg.getRecords()[0].getPayload()).trim();
 
-        new GetOneItemTask(this).execute(selfLink);
-
         // Reset intent
         setIntent(new Intent());
+
+        // Check if user has internet
+        if (checkInternetConnection()) {
+            // To load the article
+            new GetOneItemTask(this).execute(selfLink);
+        }
+
     }
 
 
