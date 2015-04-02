@@ -16,6 +16,7 @@
     <string name="message_nfc_share_try">Probeer het maar eens! :)</string>
     <string name="message_endofpopular_easter">Geen nieuwe items… Tijdmachine nodig? :)</string>
     <string name="message_no_internet">Geen internet connectie. Probeer later opnieuw!</string>
+    <string name="message_error_loading">Er is een fout opgetreden bij het laden. Probeer later opnieuw.</string>
 
     <!-- ACTIONS -->
     <string name="action_madeby">Gemaakt door Pieter Otten</string>

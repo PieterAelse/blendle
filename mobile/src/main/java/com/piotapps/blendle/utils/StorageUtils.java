@@ -3,7 +3,7 @@ package com.piotapps.blendle.utils;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.piotapps.blendle.pojo.PopularItems;
+import com.piotapps.blendle.pojo.PopularItem;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO use database instead, but skip for demo app for now because PopularItem its structure
+ * Uses BLOB storage to save and retrieve popular items.
+ *
+ * TODO use database instead, but skip for demo app for now because PopularItem its structure and time
  */
 public class StorageUtils {
 
@@ -26,7 +28,7 @@ public class StorageUtils {
         savePopularItems(context, null);
     }
 
-    public static void savePopularItems(@NonNull final Context context, final List<PopularItems.EmbeddedList.PopularItem> pi) {
+    public static void savePopularItems(@NonNull final Context context, final List<PopularItem> pi) {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(bos);
@@ -41,7 +43,7 @@ public class StorageUtils {
         }
     }
 
-    public static List<PopularItems.EmbeddedList.PopularItem> getSavedPopularItems(@NonNull final Context context) {
+    public static List<PopularItem> getSavedPopularItems(@NonNull final Context context) {
         InputStream is;
         try {
             is = context.openFileInput(STORAGE_FILENAME);
@@ -51,7 +53,7 @@ public class StorageUtils {
             InputStream inputStream = new ByteArrayInputStream(bytes);
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
 
-            return (List<PopularItems.EmbeddedList.PopularItem>) objectInputStream.readObject();
+            return (List<PopularItem>) objectInputStream.readObject();
         } catch (Exception e) {  //FileNotFoundException or IOException
             e.printStackTrace();
         }

@@ -2,7 +2,6 @@ package com.piotapps.blendle.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.TextView;
 
 import com.piotapps.blendle.R;
 import com.piotapps.blendle.pojo.ItemManifest;
-import com.piotapps.blendle.pojo.PopularItems;
+import com.piotapps.blendle.pojo.PopularItem;
 import com.piotapps.blendle.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -25,22 +24,22 @@ import butterknife.InjectView;
  * {@link android.support.v7.widget.RecyclerView.Adapter} to use for Popular items.
  * <p>
  * Uses the ItemViewHolder pattern and ButterKnife for optimal performance.
+ * <p>
+ * Uses a {@link OnItemSelectedListener} to let caller listen for item clicks. Use
+ * {@link #setOnItemSelectedListener(OnItemSelectedListener)} and {@link #removeOnItemSelectedListener()}
  */
 public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    // Item view types
     private static final int TYPE_ITEM = 0;
     private static final int TYPE_FOOTER = 1;
 
     public interface OnItemSelectedListener {
-        void onItemSelected(PopularItems.EmbeddedList.PopularItem pi);
-    }
-
-    private interface OnInternalItemSelectedListener {
-        void onItemSelected(int position);
+        void onItemSelected(PopularItem pi);
     }
 
     private boolean showLoading;
-    private List<PopularItems.EmbeddedList.PopularItem> items;
+    private List<PopularItem> items;
     private OnItemSelectedListener listener;
 
     public PopularItemAdapter() {
@@ -55,7 +54,7 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                         .from(parent.getContext())
                         .inflate(R.layout.item_popular, parent, false);
 
-                return new ItemViewHolder(item, internalItemSelectedListener);
+                return new ItemViewHolder(item);
             case TYPE_FOOTER:
                 View footer = LayoutInflater
                         .from(parent.getContext())
@@ -70,9 +69,9 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ItemViewHolder) {
             final ItemViewHolder item = (ItemViewHolder)holder;
-            final PopularItems.EmbeddedList.PopularItem pi = items.get(position);
+            final PopularItem pi = items.get(position);
 
-            // Provider logo
+            // Provider logo (fallback to app icon on error)
             final String logoUrl = Utils.getLogoUrl(pi.getItemProvider());
             Picasso.with(item.imgLogo.getContext()).load(logoUrl).error(R.mipmap.ic_launcher).into(item.imgLogo);
 
@@ -90,24 +89,23 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             item.tvPrice.setText(pi.getPrice());
 
             // Headline1
-            final String headline1 = pi.getHeadline1();
-            item.tvHeadline.setText(Html.fromHtml(headline1));
-            item.tvHeadline.setVisibility(headline1 != null ? View.VISIBLE : View.GONE);
+            Utils.setTextOrHide(item.tvHeadline, pi.getHeadline1());
 
             // Content
-            final String content = pi.getContent();
-            item.tvContent.setText(Html.fromHtml(content));
-            item.tvContent.setVisibility(content != null ? View.VISIBLE : View.GONE);
+            Utils.setTextOrHide(item.tvContent, pi.getContent());
 
-            // Set the position to tag to use in listeners
-            item.position = position;
+            // Set the position to tag to use in OnClickListener
+            holder.itemView.setTag(position);
+
+            // Set on click listener
+            holder.itemView.setOnClickListener(onItemClickListener);
         }
     }
 
     @Override
     public int getItemCount() {
         if (showLoading) {
-            return items.size() + 1;
+            return items.size() + 1; // Account for loadingview
         }
         return items.size();
     }
@@ -115,16 +113,17 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public int getItemViewType(int position) {
         if (showLoading && position == items.size()) {
-            return TYPE_FOOTER;
+            return TYPE_FOOTER; // Account for loadingview
         }
 
         return TYPE_ITEM;
     }
 
-    private final OnInternalItemSelectedListener internalItemSelectedListener = new OnInternalItemSelectedListener() {
+    private final View.OnClickListener onItemClickListener = new View.OnClickListener() {
         @Override
-        public void onItemSelected(final int position) {
+        public void onClick(View v) {
             if (listener != null) {
+                final int position = (int)v.getTag();
                 listener.onItemSelected(items.get(position));
             }
         }
@@ -149,16 +148,18 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.showLoading = showLoading;
     }
 
-    public void addItems(@NonNull List<PopularItems.EmbeddedList.PopularItem> newItems) {
+    public void addItems(@NonNull List<PopularItem> newItems) {
+        // Add to current items
         items.addAll(newItems);
+        // Notify changed!
         notifyDataSetChanged();
     }
 
-    public List<PopularItems.EmbeddedList.PopularItem> getAllItems() {
+    public List<PopularItem> getAllItems() {
         return items;
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ItemViewHolder extends RecyclerView.ViewHolder {
         @InjectView(R.id.popularitem_logo)
         ImageView imgLogo;
         @InjectView(R.id.popularitem_price)
@@ -170,20 +171,9 @@ public class PopularItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         @InjectView(R.id.popularitem_content)
         TextView tvContent;
 
-        private OnInternalItemSelectedListener listener;
-        int position;
-
-        public ItemViewHolder(View view, OnInternalItemSelectedListener listener) {
+        public ItemViewHolder(View view) {
             super(view);
             ButterKnife.inject(this, view);
-
-            this.listener = listener;
-            view.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            listener.onItemSelected(position);
         }
     }
 

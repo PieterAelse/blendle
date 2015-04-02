@@ -7,20 +7,8 @@ import java.io.Serializable;
 
 public class ItemManifest implements Serializable {
 
-    @SerializedName(APIConstants.KEY_ITEM_INDEX)
-    private int index;
-
-    @SerializedName(APIConstants.KEY_LINKS)
-    private Links links;
-
-    @SerializedName(APIConstants.KEY_FORMAT_VERSION)
-    private int formatVersion;
-
     @SerializedName(APIConstants.KEY_ID)
     private String id;
-
-    @SerializedName(APIConstants.KEY_DATE)
-    private String date; // TODO: make Date object using GsonBuilder().setDateFormat or a deserializer
 
     @SerializedName(APIConstants.KEY_PROVIDER)
     private Provider provider;
@@ -31,24 +19,8 @@ public class ItemManifest implements Serializable {
     @SerializedName(APIConstants.KEY_IMAGES)
     private ImageHolder[] images;
 
-    public int getIndex() {
-        return index;
-    }
-
-    public Links getLinks() {
-        return links;
-    }
-
-    public int getFormatVersion() {
-        return formatVersion;
-    }
-
     public String getId() {
         return id;
-    }
-
-    public String getDate() {
-        return date;
     }
 
     public String getProvider() {
@@ -61,10 +33,6 @@ public class ItemManifest implements Serializable {
 
     public ImageHolder[] getImages() {
         return images;
-    }
-
-    public ImageHolder.ImageSizes getFirstImage() {
-        return images[0].images;
     }
 
     private class Provider implements Serializable {
@@ -100,47 +68,33 @@ public class ItemManifest implements Serializable {
         public class ImageSizes implements Serializable {
 
             @SerializedName(APIConstants.KEY_IMAGE_SMALL)
-            private Image small;
+            private Href small;
 
             @SerializedName(APIConstants.KEY_IMAGE_MEDIUM)
-            private Image medium;
+            private Href medium;
 
             @SerializedName(APIConstants.KEY_IMAGE_LARGE)
-            private Image large;
+            private Href large;
 
             @SerializedName(APIConstants.KEY_IMAGE_ORIGINAL)
-            private Image original;
+            private Href original;
 
             public String getUrlSmall() {
-                return small.href;
+                return small.getHref();
             }
 
             public String getUrlMedium() {
-                return medium.href;
+                return medium.getHref();
             }
 
             public String getUrlLarge() {
-                return large.href;
+                return large.getHref();
             }
 
             public String getUrlOriginal() {
-                return original.href;
+                return original.getHref();
             }
 
-            private class Image implements Serializable {
-                @SerializedName(APIConstants.KEY_HREF)
-                String href;
-
-                @SerializedName(APIConstants.KEY_IMAGE_WIDTH)
-                int width;
-
-                @SerializedName(APIConstants.KEY_IMAGE_HEIGHT)
-                int height;
-            }
         }
     }
-
-    // TODO: add?
-    // length: words: value
-    // issue : id: value
 }

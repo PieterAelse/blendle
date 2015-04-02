@@ -20,10 +20,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nispok.snackbar.Snackbar;
 import com.nispok.snackbar.SnackbarManager;
-import com.piotapps.blendle.utils.DayDreamUtils;
+import com.piotapps.blendle.utils.DaydreamUtils;
 import com.piotapps.blendle.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -34,6 +36,9 @@ import com.squareup.picasso.Picasso;
  * </p>
  */
 public class BaseActivity extends ActionBarActivity {
+
+    /** Used as a base delay for showing messages. This way the user won't be prompted with a dialog immediately */
+    protected static final int UI_MESSAGES_DELAY = 3000;
 
     protected Handler delayHandler;
 
@@ -52,30 +57,33 @@ public class BaseActivity extends ActionBarActivity {
         // Make it dark red
         progressBar.getIndeterminateDrawable().setColorFilter(getResources().getColor(R.color.blende_red_dark), PorterDuff.Mode.MULTIPLY);
         // Align it to the right
-        ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.MATCH_PARENT, GravityCompat.END);
+        ActionBar.LayoutParams layoutParams = new ActionBar.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT,
+                ActionBar.LayoutParams.MATCH_PARENT, GravityCompat.END);
         // Add to actionbar as customview
         getSupportActionBar().setDisplayShowCustomEnabled(true);
         getSupportActionBar().setCustomView(progressBar, layoutParams);
         // Hide at start
         setSupportProgressBarIndeterminateVisibility(false);
 
-        // Set debug flag to Picasso instance
+        // Forward debug flag to Picasso instance
         Picasso.with(getApplicationContext()).setIndicatorsEnabled(BuildConfig.DEBUG);
     }
 
     @Override
     public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
-        // Override default (deprecated) method to show the custom progressbar
+        // Override the default (deprecated) method to show the custom progressbar
         getSupportActionBar().getCustomView().setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        if (!Utils.canDaydream()) {
-            // Daydreams not available => hide menu option
-            menu.findItem(R.id.action_setup_daydream).setVisible(false);
+        final MenuItem daydreamItem = menu.findItem(R.id.action_setup_daydream);
+        if (daydreamItem != null) {
+            daydreamItem.setVisible(DaydreamUtils.canDaydream());
         }
+
+        // Return true to show the menu
         return true;
     }
 
@@ -87,13 +95,15 @@ public class BaseActivity extends ActionBarActivity {
                 // Don't do anything
                 return true;
             case R.id.action_setup_daydream:
+                // Try to start the Daydream settings screen
                 try {
-                    DayDreamUtils.startDayDreamsSettings(this);
+                    DaydreamUtils.startDaydreamsSettings(this);
                 } catch (ActivityNotFoundException e) {
                     showMessage(R.string.error_daydream_startsettings);
                 }
                 return true;
             case android.R.id.home:
+                // Override the up/home button for best behavior
                 if(!isTaskRoot()) {
                     onBackPressed();
                 } else {
@@ -114,10 +124,13 @@ public class BaseActivity extends ActionBarActivity {
         delayHandler.removeCallbacksAndMessages(null);
     }
 
+    /**
+     * Check the internet connection and if there's none shows a dialog with an error
+     * @return true if there is an internet connection
+     */
     protected boolean checkInternetConnection() {
         if (!Utils.hasInternetConnection(getApplicationContext())) {
-            AlertDialog.Builder adBuilder = new AlertDialog.Builder(this);
-            adBuilder.setTitle(R.string.dialog_title_no_internet).setMessage(R.string.dialog_message_no_internet);
+            final AlertDialog.Builder adBuilder = createAlertDialog(R.string.dialog_title_no_internet, R.string.dialog_message_no_internet);
             adBuilder.setPositiveButton(R.string.dialog_btn_ok, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -131,16 +144,52 @@ public class BaseActivity extends ActionBarActivity {
         return true;
     }
 
+    /**
+     * Add a message to the log
+     * @param message message to add
+     */
     protected void log(final String message) {
         Log.v(BuildConfig.TAG, message);
     }
 
-    protected void showMessage(@NonNull @StringRes final int resourceId) {
+    /**
+     * Show a message to the user using a SnackBar
+     * @param resourceId the message to show
+     */
+    protected void showMessage(@StringRes final int resourceId) {
         showMessage(getString(resourceId));
     }
 
-    // Should only be used on debug occasions :)
+    /**
+     ** Show a message to the user using a SnackBar
+     * @param message the message to show
+     */
     protected void showMessage(@NonNull final String message) {
         SnackbarManager.show(Snackbar.with(this).text(message).colorResource(R.color.blende_red).swipeToDismiss(true));
+    }
+
+    /**
+     * Shows a Blendle themed Toast to the user
+     * @param resourceId the message to show
+     */
+    protected void showThemedToast(@StringRes final int resourceId, final int length) {
+        Toast hint = Toast.makeText(getApplicationContext(), resourceId, length);
+        final View hintView = hint.getView();
+        hintView.setBackgroundColor(getResources().getColor(R.color.blende_red));
+        if (hintView instanceof TextView) {
+            ((TextView) hintView).setTextColor(getResources().getColor(android.R.color.white));
+        }
+        hint.show();
+    }
+
+    /**
+     * Creates an alertdialog to show to the user.
+     * @param titleId title of the dialog
+     * @param messageId message of the dialog
+     * @return the alertdialog to add buttons and show
+     */
+    protected AlertDialog.Builder createAlertDialog(@StringRes final int titleId, @StringRes final int messageId) {
+        AlertDialog.Builder adBuilder = new AlertDialog.Builder(this);
+        return adBuilder.setTitle(titleId).setMessage(messageId);
     }
 }

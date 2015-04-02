@@ -26,14 +26,14 @@
 
             <TextView
                 android:id="@+id/popularitem_price"
+                style="@style/BlendlePriceTileStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="4dp"
                 android:layout_marginRight="8dp"
                 android:gravity="center_vertical"
-                tools:text="13,37 euro"
-                style="@style/BlendlePriceTileStyle"/>
+                tools:text="13,37 euro"/>
 
             <ImageView
                 android:id="@+id/popularitem_logo"
@@ -71,6 +71,7 @@
 
         <TextView
             android:id="@+id/popularitem_headline"
+            style="@style/BlendleHeadlineStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
@@ -78,11 +79,11 @@
             android:layout_marginBottom="12dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            tools:text="Wow dit is een pakkende headline! Ik MOET dit artikeltje lezen!\nWauwie."
-            style="@style/BlendleHeadlineStyle"/>
+            tools:text="Wow dit is een pakkende headline! Ik MOET dit artikeltje lezen!\nWauwie."/>
 
         <TextView
             android:id="@+id/popularitem_content"
+            style="@style/BlendleContentStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -90,8 +91,7 @@
             android:paddingBottom="-16dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
-            tools:text="Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing."
-            style="@style/BlendleContentStyle"/>
+            tools:text="Well, the way they make shows is, they make one show. That show's called a pilot. Then they show that show to the people who make shows, and on the strength of that one show they decide if they're going to make more shows. Some pilots get picked and become television programs. Some don't, become nothing. She starred in one of the ones that became nothing."/>
 
         <View
             android:layout_width="wrap_content"

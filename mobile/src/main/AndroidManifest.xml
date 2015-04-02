@@ -55,7 +55,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
 
-            <!-- Point to additional information for this dream (optional) -->
+            <!-- Point to additional information/settings for this dream -->
             <meta-data
                 android:name="android.service.dream"
                 android:resource="@xml/blendle_dream" />

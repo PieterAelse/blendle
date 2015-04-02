@@ -22,6 +22,8 @@ import com.piotapps.blendle.R;
 import com.piotapps.blendle.adapters.PopularItemAdapter;
 import com.piotapps.blendle.api.APIConstants;
 import com.piotapps.blendle.api.GetItemsTask;
+import com.piotapps.blendle.interfaces.BlendleApiCallback;
+import com.piotapps.blendle.pojo.PopularItem;
 import com.piotapps.blendle.pojo.PopularItems;
 import com.piotapps.blendle.utils.StorageUtils;
 import com.piotapps.blendle.utils.Utils;
@@ -34,12 +36,15 @@ import butterknife.InjectView;
 import static com.nineoldandroids.view.ViewPropertyAnimator.animate;
 
 /**
- * TODO
+ * A fragment containing an endless list of Popular items. Supports both vertical scrolling in
+ * portrait mode and horizontal scrolling in landscape mode. Also supports pull to refresh.
  */
-public class PopularTodayFragment extends BaseFragment implements GetItemsTask.AsynCallback {
+public class PopularTodayFragment extends BaseFragment  {
 
+    /** Key used to save the next URL to load so savedInstance */
     private static final String KEY_URL_TO_LOAD_NEXT = "url_to_load_next";
 
+    // Views
     @InjectView(R.id.main_header)
     Toolbar header;
     @InjectView(R.id.main_swiperefreshlayout)
@@ -76,38 +81,46 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
 
         final boolean inPortrait = getActivity().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
 
-        // Hide header and padding when in landscape
+        // When in landscape:
+        // - Hide header and padding when in landscape
+        // Disable pull to refresh in horizontal layout because it makes scrolling difficult
         if(!inPortrait) {
             header.setVisibility(View.GONE);
             final int padding = recyclerView.getPaddingLeft();
             recyclerView.setPadding(padding, padding, padding, padding);
+            swipeRefreshLayout.setEnabled(false);
+        } else {
+            // Set refresh listener and colorscheme
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    // Create new adapter to reset all current items
+                    adapter = new PopularItemAdapter();
+                    adapter.setOnItemSelectedListener(onItemSelectedListener);
+                    recyclerView.setAdapter(adapter);
+
+                    // Reset link
+                    nextToLoadUrl = APIConstants.URL_POPULAR_ITEMS;
+
+                    // And load the items :)
+                    fetchMoreItems();
+                }
+            });
+            swipeRefreshLayout.setColorSchemeResources(R.color.blende_red_dark, R.color.blende_red_dark_transparent, R.color.blende_red_transparent, R.color.blende_red);
         }
 
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Create new adapter to reset all current items
-                adapter = new PopularItemAdapter();
-                adapter.setOnItemSelectedListener(onItemSelectedListener);
-                recyclerView.setAdapter(adapter);
-
-                // Reset link
-                nextToLoadUrl = APIConstants.URL_POPULAR_ITEMS;
-
-                // And load the items :)
-                fetchMoreItems();
-            }
-        });
-        swipeRefreshLayout.setColorSchemeResources(R.color.blende_red_dark, R.color.blende_red_dark_transparent, R.color.blende_red_transparent, R.color.blende_red);
-
+        // Create and set layoutmanager to recyclerview (according to orientation)
         layoutManager= new LinearLayoutManager(getActivity().getApplicationContext());
         layoutManager.setOrientation(inPortrait ? LinearLayoutManager.VERTICAL : LinearLayoutManager.HORIZONTAL);
         layoutManager.setSmoothScrollbarEnabled(true);
         recyclerView.setLayoutManager(layoutManager);
 
+        // Create and set adapter
         adapter = new PopularItemAdapter();
         adapter.setOnItemSelectedListener(onItemSelectedListener);
         recyclerView.setAdapter(adapter);
+
+        // Set other recylerview settings
         recyclerView.setOnScrollListener(new MyRecyclerScrollListener());
         recyclerView.setHorizontalScrollBarEnabled(!inPortrait);
         recyclerView.setVerticalScrollBarEnabled(inPortrait);
@@ -123,9 +136,12 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
         }
     }
 
+    /**
+     * OnClickListener for items displayed in the recycler view. Opens an {@link ArticleActivity} to view (and possibly share) the article.
+     */
     private final PopularItemAdapter.OnItemSelectedListener onItemSelectedListener = new PopularItemAdapter.OnItemSelectedListener() {
         @Override
-        public void onItemSelected(PopularItems.EmbeddedList.PopularItem pi) {
+        public void onItemSelected(PopularItem pi) {
             final Intent articleIntent = new Intent(getActivity().getApplicationContext(), ArticleActivity.class);
             articleIntent.putExtra(ArticleActivity.EXTRA_ARTICLE_INSTANCE, pi);
             startActivity(articleIntent);
@@ -141,36 +157,6 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
         outState.putString(KEY_URL_TO_LOAD_NEXT, nextToLoadUrl);
     }
 
-    @Override
-    public void started() {
-        isLoadingItems = true;
-        updateUIToLoadingState();
-    }
-
-    @Override
-    public void progress() {
-        // TODO?
-    }
-
-    @Override
-    public void ended(final PopularItems pi) {
-        if(!isAdded()) return;
-
-        isLoadingItems = false;
-        updateUIToLoadingState();
-
-        if (pi != null) {
-            // Add items to adapter
-            adapter.addItems(Arrays.asList(pi.getPopularItems()));
-
-            // Save to storage
-            StorageUtils.savePopularItems(getActivity().getApplicationContext(), adapter.getAllItems());
-
-            // Save link to load next
-            nextToLoadUrl = pi.getLinks().getNext();
-        }
-    }
-
     private void fetchMoreItems() {
         // Check internet
         if (Utils.hasInternetConnection(getActivity().getApplicationContext())) {
@@ -182,7 +168,7 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
             }
 
             // Fetch the next page on a background thread
-            new GetItemsTask(this).execute(nextToLoadUrl);
+            new GetItemsTask(blendleApiCallback).execute(nextToLoadUrl);
         } else {
             // No internet, show message
             showMessage(R.string.message_no_internet);
@@ -223,6 +209,49 @@ public class PopularTodayFragment extends BaseFragment implements GetItemsTask.A
         }
     }
 
+    /** Implementation of the different states and results of using the API */
+    private final BlendleApiCallback blendleApiCallback = new BlendleApiCallback() {
+
+        @Override
+        public void started() {
+            isLoadingItems = true;
+            updateUIToLoadingState();
+        }
+
+        @Override
+        public void onError() {
+            isLoadingItems = false;
+            updateUIToLoadingState();
+            showMessage(R.string.message_error_loading);
+        }
+
+        @Override
+        public void endedItemList(PopularItems popularItems) {
+            if(!isAdded()) {
+                // Fragment isn't visible anymore, ignore these results
+                return;
+            }
+
+            isLoadingItems = false;
+            updateUIToLoadingState();
+
+            // Add items to adapter
+            adapter.addItems(Arrays.asList(popularItems.getPopularItems()));
+
+            // Save to storage
+            StorageUtils.savePopularItems(getActivity().getApplicationContext(), adapter.getAllItems());
+
+            // Save link to load next
+            nextToLoadUrl = popularItems.getLinks().getNext();
+        }
+
+        @Override
+        public void endedSingleItem(PopularItem popularItem) {
+            // Not used here
+        }
+    };
+
+    /** Use a scroll listener to decide when to start fetching more items and when to show/hide the title toolbar */
     private final class MyRecyclerScrollListener extends RecyclerView.OnScrollListener {
 
         private static final int ITEMS_OFFSET = 2;

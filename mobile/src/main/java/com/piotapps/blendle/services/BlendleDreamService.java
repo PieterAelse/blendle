@@ -6,14 +6,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.service.dreams.DreamService;
 import android.support.v7.widget.CardView;
-import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.piotapps.blendle.R;
 import com.piotapps.blendle.pojo.ItemManifest;
-import com.piotapps.blendle.pojo.PopularItems;
+import com.piotapps.blendle.pojo.PopularItem;
 import com.piotapps.blendle.utils.StorageUtils;
 import com.piotapps.blendle.utils.Utils;
 import com.squareup.picasso.Picasso;
@@ -23,6 +22,10 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+/**
+ * The Blendle popular items Daydream! Shows all saved popular items and fades to the next
+ * article after some time.
+ */
 @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class BlendleDreamService extends DreamService {
 
@@ -45,7 +48,7 @@ public class BlendleDreamService extends DreamService {
     @InjectView(R.id.article_content)
     TextView tvContent;
 
-    private List<PopularItems.EmbeddedList.PopularItem> items;
+    private List<PopularItem> items;
     private Handler itemsHandler;
     private int currentItem;
 
@@ -53,13 +56,15 @@ public class BlendleDreamService extends DreamService {
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
 
+        // Set Daydream settings
         setFullscreen(true);
-
         setInteractive(INTERACTIVE);
 
+        // Set view
         setContentView(R.layout.daydream_articles);
         ButterKnife.inject(this, getWindow().getDecorView().getRootView());
 
+        // Get handler and set first item
         itemsHandler = new Handler(Looper.getMainLooper());
         currentItem = 0;
     }
@@ -68,10 +73,12 @@ public class BlendleDreamService extends DreamService {
     public void onDreamingStarted() {
         super.onDreamingStarted();
 
+        // Begin showing articles!
         items = StorageUtils.getSavedPopularItems(getApplicationContext());
         itemsHandler.post(showNextItem);
     }
 
+    /** 'task' to show the next popular item using a crossfade animation */
     private final Runnable showNextItem = new Runnable() {
         @Override
         public void run() {
@@ -99,7 +106,7 @@ public class BlendleDreamService extends DreamService {
         }
     };
 
-    private void showArticle(PopularItems.EmbeddedList.PopularItem article) {
+    private void showArticle(PopularItem article) {
         // Provider logo
         final String logoUrl = Utils.getLogoUrl(article.getItemProvider());
         Picasso.with(imgLogo.getContext()).load(logoUrl).error(R.mipmap.ic_launcher).into(imgLogo);
@@ -118,23 +125,10 @@ public class BlendleDreamService extends DreamService {
         tvPrice.setText(article.getPrice());
 
         // Headline1
-        final String headline1 = article.getHeadline1();
-        tvHeadline.setText(Html.fromHtml(headline1));
-        tvHeadline.setVisibility(headline1 != null ? View.VISIBLE : View.GONE);
+        Utils.setTextOrHide(tvHeadline, article.getHeadline1());
 
         // Content
-        final String content = article.getContent();
-        tvContent.setText(Html.fromHtml(content));
-        tvContent.setVisibility(content != null ? View.VISIBLE : View.GONE);
+        Utils.setTextOrHide(tvContent, article.getContent());
     }
 
-    @Override
-    public void onDreamingStopped() {
-        super.onDreamingStopped();
-    }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-    }
 }

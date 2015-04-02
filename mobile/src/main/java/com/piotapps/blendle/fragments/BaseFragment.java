@@ -39,19 +39,33 @@ public class BaseFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
+        // Get a handler on the UI thread to post messages to
         uiHandler = new Handler(Looper.getMainLooper());
+
+        // Don't contribute to the optionsmenu
         setHasOptionsMenu(false);
     }
 
+    /**
+     * Add a message to the log
+     * @param message message to add
+     */
     protected void log(final String message) {
         Log.v(BuildConfig.TAG, message);
     }
 
+    /**
+     * Show a message to the user using a SnackBar
+     * @param resourceId the message to show
+     */
     protected void showMessage(@NonNull @StringRes final int resourceId) {
         showMessage(getString(resourceId));
     }
 
-    // Should only be used on debug occasions :)
+    /**
+     ** Show a message to the user using a SnackBar
+     * @param message the message to show
+     */
     protected void showMessage(@NonNull final String message) {
         SnackbarManager.show(Snackbar.with(getActivity()).text(message).colorResource(R.color.blende_red).swipeToDismiss(true));
     }

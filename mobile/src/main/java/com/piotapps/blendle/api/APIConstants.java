@@ -1,10 +1,16 @@
 package com.piotapps.blendle.api;
 
+/**
+ * Set of constants used for accessing and parsing the Blendle API.
+ */
 public class APIConstants {
 
     // API URL
     public static final String URL_ALL = "https://static.blendle.nl/api.json"; // Don't use this one for now
     public static final String URL_POPULAR_ITEMS = "https://ws.blendle.nl/items/popular"; // Instead we'll use this one :) #lazy
+
+    // Link for provider logo's
+    public static final String PROVIDER_LOGO_URL = "https://blendle.com/img/providers/%s/logo.png";
 
     // Sub pages
     public static final String PAGE_POPULAR_ITEMS = "items_popular";

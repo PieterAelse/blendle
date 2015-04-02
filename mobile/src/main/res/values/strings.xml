@@ -16,6 +16,7 @@
     <string name="message_nfc_share_try">Let me see you give it a try! :)</string>
     <string name="message_endofpopular_easter">No more items… Need a time machine? :)</string>
     <string name="message_no_internet">No internet connection. Try again later!</string>
+    <string name="message_error_loading">An erorr has occurred while loading. Please try again.</string>
 
     <!-- ACTIONS -->
     <string name="action_madeby">Made by Pieter Otten</string>
