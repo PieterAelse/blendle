@@ -31,7 +31,11 @@ public class Utils {
      * @param text the text that needs to be displayed (may be null)
      */
     public static void setTextOrHide(@NonNull final TextView textView, final String text) {
-        textView.setText(Html.fromHtml(text));
+        if (text == null) {
+            textView.setText("");
+        } else {
+            textView.setText(Html.fromHtml(text));
+        }
         textView.setVisibility(text != null ? View.VISIBLE : View.GONE);
     }
 
